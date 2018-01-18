@@ -1,9 +1,6 @@
 import os
-from flask import Flask
 from flask import send_from_directory, render_template
-
-
-app = Flask(__name__)
+from app import app
 
 
 @app.route('/favicon.ico')
@@ -13,9 +10,6 @@ def favicon():
 
 
 @app.route('/')
-def hello_world():
+@app.route('/index')
+def index():
     return render_template('index.html')
-
-
-if __name__ == '__main__':
-    app.run()
