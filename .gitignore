@@ -1,5 +1,6 @@
 __*
 /db_repository
+/tmp
 *.db
 *.pyc
 .idea
