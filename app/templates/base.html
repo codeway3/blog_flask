@@ -8,21 +8,32 @@
   </head>
   <body>
     <div>Microblog:
-        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('index', next=next) }}">Home</a>
         {% if g.user.is_authenticated %}
-        | <a href="{{ url_for('logout') }}">Logout</a>
+            |<a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
+    <div>
+        {% if g.user.is_authenticated %}
+            <p>Welcome, User {{ user.id }} {{ user.nickname }} {{ user.email }}</p>
         {% endif %}
     </div>
     <hr>
-    {% with messages = get_flashed_messages() %}
+    {% with messages = posts %}
     {% if messages %}
     <ul>
     {% for message in messages %}
-        <li>{{ message }} </li>
+        <li>{{ message['author']['nickname'] }}: {{ message['body'] }} </li>
     {% endfor %}
     </ul>
     {% endif %}
     {% endwith %}
     {% block content %}{% endblock %}
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
   </body>
 </html>
