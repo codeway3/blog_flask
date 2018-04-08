@@ -1,21 +1,28 @@
 <html>
   <head>
     {% if title %}
-    <title>{{title}} - microblog</title>
+    <title>{{title}} - blog</title>
     {% else %}
-    <title>microblog</title>
+    <title>blog</title>
     {% endif %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
   </head>
   <body>
-    <div>Microblog:
-        <a href="{{ url_for('index', next=next) }}">Home</a>
-        {% if g.user.is_authenticated %}
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <div>blog:
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.is_authenticated %}
             |<a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
     </div>
     <div>
-        {% if g.user.is_authenticated %}
-            <p>Welcome, User {{ user.id }} {{ user.nickname }} {{ user.email }}</p>
+        {% if current_user.is_authenticated %}
+            <p>Welcome, User {{ current_user.id }} {{ current_user.nickname }} {{ current_user.email }}</p>
         {% endif %}
     </div>
     <hr>
@@ -29,11 +36,5 @@
     {% endif %}
     {% endwith %}
     {% block content %}{% endblock %}
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
-    </div>
-    {% endfor %}
   </body>
 </html>

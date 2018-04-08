@@ -7,10 +7,27 @@ from .form import LoginForm
 from .models import User
 
 
+users = [
+    {'nickname': 'aaa', 'id': '111111'}
+]
+
+
+@app.before_request
+def before_request():
+    pass
+
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+@lm.user_loader
+def load_user(user_id):
+    for user in users:
+        if user['nickname'] == user_id:
+            return User(nickname=user['nickname'], id=user['id'])
 
 
 @lm.unauthorized_handler
@@ -19,45 +36,28 @@ def handle_needs_login():
     return redirect('/login')
 
 
-@lm.user_loader
-def load_user(nickname):
-    return User(nickname=nickname)
-    # return User.query.get(int(user_id))
-
-
-@app.before_request
-def before_request():
-    flash(current_user)
-    g.user = current_user
-
-
-# def redirect_dest(home):
-#     dest_url = request.args.get('next')
-#     if not dest_url:
-#         dest_url = url_for(home)
-#     return redirect(dest_url)
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        flash(form.name.data)
         user = User(nickname=form.name.data)
         g.user = user
-        flash(user.nickname)
         login_user(user=user, remember=True)
         flash('Logged in successfully.')
         return redirect('/index')
-    flash('Login failed')
+    else:
+        flash('Login failed')
     return render_template('login.html', title='Sign In', form=form)
 
 
 @app.route('/')
+def red():
+    return redirect('/index')
+
+
 @app.route('/index')
 @login_required
 def index():
-    flash('index')
     user = g.user
     posts = [
         {

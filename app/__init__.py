@@ -1,6 +1,11 @@
 from flask import Flask
-from flask_login import LoginManager
+from flask_login import LoginManager, AnonymousUserMixin
 from flask_sqlalchemy import SQLAlchemy
+
+
+class Anonymous(AnonymousUserMixin):
+    def __init__(self):
+        self.username = 'Guest'
 
 
 app = Flask(__name__)
@@ -10,6 +15,8 @@ db = SQLAlchemy(app)
 
 lm = LoginManager()
 lm.init_app(app)
-lm.login_view = 'login'
+lm.login_view = 'users.login'
+lm.anonymous_user = Anonymous
+
 
 from app import views, models
