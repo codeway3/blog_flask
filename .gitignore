@@ -2,7 +2,11 @@ __*
 /db_repository
 /tmp
 /backup
-*.db
 *.pyc
+*.egg-info
+*.DS_Store
 .idea
 .vscode
+.cache
+.idea
+test.db
