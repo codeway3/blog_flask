@@ -6,6 +6,8 @@ from app import app, db
 
 TEST_DB = 'test.db'
 
+app.config.update({'JSONIFY_PRETTYPRINT_REGULAR': False})
+
 
 class BasicTestCase(unittest.TestCase):
 
@@ -17,7 +19,7 @@ class BasicTestCase(unittest.TestCase):
 
     def test_database(self):
         """initial test. ensure that the database exists"""
-        tester = os.path.exists("flaskr.db")
+        tester = os.path.exists("app/flaskr.db")
         self.assertTrue(tester)
 
 
