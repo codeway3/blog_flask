@@ -19,9 +19,12 @@
 
     <br><br>
 
-    {% for message in get_flashed_messages() %}
-      <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
-    {% endfor %}
+    <div class="flash alert alert-success col-sm-4" id="delete-info"></div>
+    <div id="flash">
+      {% for message in get_flashed_messages() %}
+        <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
+      {% endfor %}
+    </div>
 
     {% if session.logged_in %}
       <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">

@@ -1,6 +1,6 @@
 # imports
 from flask import Flask, request, session, redirect, url_for, \
-     abort, render_template, flash, jsonify
+     abort, render_template, flash, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -29,7 +29,14 @@ db = SQLAlchemy(app)
 import models
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
 @app.route('/')
+@app.route('/index')
 def index():
     """Searches the database for entries, then displays them."""
     entries = db.session.query(models.Flaskr)
@@ -90,7 +97,6 @@ def delete_entry(post_id):
         db.session.query(models.Flaskr).filter_by(post_id=new_id).delete()
         db.session.commit()
         result = {'status': 1, 'message': "Post Deleted"}
-        flash('The entry was deleted.')
     except Exception as e:
         result = {'status': 0, 'message': repr(e)}
     return jsonify(result)
